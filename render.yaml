@@ -1,0 +1,36 @@
+services:
+  - name: fightmatch-laravel
+    type: web
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_KEY
+        sync: false
+      - key: APP_DEBUG
+        value: false
+      - key: APP_URL
+        value: https://fightmatch.onrender.com
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromService: fightmatch-db
+      - key: DB_PORT
+        value: 5432
+      - key: DB_DATABASE
+        value: fightmatch
+      - key: DB_USERNAME
+        value: postgres
+      - key: DB_PASSWORD
+        sync: false
+
+  - name: fightmatch-db
+    type: pserv
+    env: postgres
+    plan: free
+    disk:
+      name: fightmatch-db-data
+      mountPath: /var/lib/postgresql/data
+      sizeGB: 1
